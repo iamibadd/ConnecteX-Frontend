@@ -1,13 +1,14 @@
 import React from 'react';
-import {Container, Typography, Link} from "@material-ui/core";
+import {Link} from "@material-ui/core";
+import logo from "../assets/logo.png";
 
 const Header = () => {
   return (
-    <Container component={"main"} maxWidth={"sm"}>
+    <div className="text-center">
       <Link href={'/'} style={{textDecoration: 'none'}}>
-        <Typography variant={"h3"} color={"secondary"} style={{marginLeft: '125px'}}>ConnectEx</Typography>
+        <img src={logo} alt={'logo'} height={75}/>
       </Link>
-    </Container>
+    </div>
   );
 };
 

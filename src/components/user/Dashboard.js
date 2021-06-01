@@ -1,286 +1,76 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
-  CBadge,
   CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardHeader,
   CCol,
-  CProgress,
   CRow,
-  CCallout
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import {useHistory} from 'react-router-dom';
 import axios from "axios";
-import MainChartExample from '../../views/charts/MainChartExample.js';
-import WidgetsBrand from "../../views/widgets/WidgetsBrand";
+import WidgetsBrand from "../../utils/WidgetsBrand";
 import Header from "../../utils/Header";
+import Logout from "../../utils/Logout";
+import {ClipLoader} from "react-spinners";
+import {ContextApi} from "../../utils/ContextApi";
+import {Typography} from "@material-ui/core";
 
 const Dashboard = (props) => {
   const history = useHistory();
+  const {User} = useContext(ContextApi);
+  const [user, setUser] = User;
+  const [apiCall, setApiCall] = useState(false);
   const current_user = props.match.params.username;
-  const user = localStorage.getItem('user');
+  const loggedInUser = localStorage.getItem('user');
   const route = localStorage.getItem('route');
   const token = localStorage.getItem('token');
+  const current_date = new Date().toJSON().slice(0, 10).replaceAll('/', '-');
   useEffect(() => {
     if (token === null) history.push('/');
-    else if (user !== current_user) history.push(`/${route}/${user}`);
+    else if (loggedInUser !== current_user || route !== 'user') history.push(`/${route}/${loggedInUser}`);
     axios.post(`/user/${current_user}`, {username: current_user}, {headers: {token: token}})
-      .then(async response => console.log(response.data))
+      .then(async response => setUser(response.data.data))
       .catch(() => alert('Something went wrong!'));
-  }, [current_user, token, history, route, user])
+  }, [current_user, token, history, route, loggedInUser, setUser])
+
+  const generateReports = () => {
+    setApiCall(true);
+    setTimeout(function () {
+      window.open(`http://localhost:5000/reports?email=${user.email}`, "_parent");
+      setApiCall(false);
+    }, 2000);
+  }
+
   return (
     <>
       <Header/>
       <CCard>
+        <Logout/>
         <CCardBody>
           <CRow>
-            <CCol sm="5">
-              <h4 id="traffic" className="card-title mb-0">Connectex Traffic Stats</h4>
-              <div className="small text-muted">February 2021</div>
+            <CCol sm="12">
+              <div className="text-center">
+                <Typography color={"textPrimary"}
+                            variant={'body1'}>Welcome, <strong>{user.first_name} {user.last_name}</strong>
+                </Typography>
+                <strong>{current_date}</strong>
+                <Typography color={'primary'}>You can view your <strong>{user.package}</strong> package details by
+                  clicking on the below social media icons.</Typography>
+              </div>
             </CCol>
-            <CCol sm="7" className="d-none d-md-block">
-              <CButton color="primary" className="float-right">
-                <CIcon name="cil-cloud-download"/>
-              </CButton>
-              <CButtonGroup className="float-right mr-3">
-                {
-                  ['Month'].map(value => (
-                    <CButton
-                      color="outline-secondary"
-                      key={value}
-                      className="mx-0"
-                      active={value === 'Month'}
-                    >
-                      {value}
-                    </CButton>
-                  ))
+            <CCol className="d-md-block">
+              <CButton className="float-right" style={{backgroundColor: '#00bfff'}} onClick={generateReports}>
+                <h4 className="text-white font-weight-lighter">Generate CSV</h4>
+                {apiCall ? <ClipLoader color={'black'} loading={apiCall} size={40}/>
+                  : <CIcon name="cil-cloud-download" className="text-white" size="2xl"/>
                 }
-              </CButtonGroup>
+              </CButton>
             </CCol>
           </CRow>
-          <MainChartExample style={{height: '300px', marginTop: '40px'}}/>
         </CCardBody>
       </CCard>
-      <WidgetsBrand withCharts/>
-      <CRow>
-        <CCol>
-          <CCard>
-            <CCardHeader>
-              Traffic {' & '} Sales
-            </CCardHeader>
-            <CCardBody>
-              <CRow>
-                <CCol xs="12" md="6" xl="6">
-
-                  <CRow>
-                    <CCol sm="6">
-                      <CCallout color="info">
-                        <small className="text-muted">New Clients</small>
-                        <br/>
-                        <strong className="h4">9,123</strong>
-                      </CCallout>
-                    </CCol>
-                    <CCol sm="6">
-                      <CCallout color="danger">
-                        <small className="text-muted">Recurring Clients</small>
-                        <br/>
-                        <strong className="h4">22,643</strong>
-                      </CCallout>
-                    </CCol>
-                  </CRow>
-
-                  <hr className="mt-0"/>
-
-                  <div className="progress-group mb-4">
-                    <div className="progress-group-prepend">
-                      <span className="progress-group-text">
-                        Monday
-                      </span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <CProgress className="progress-xs" color="info" value="34"/>
-                      <CProgress className="progress-xs" color="danger" value="78"/>
-                    </div>
-                  </div>
-                  <div className="progress-group mb-4">
-                    <div className="progress-group-prepend">
-                      <span className="progress-group-text">
-                      Tuesday
-                      </span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <CProgress className="progress-xs" color="info" value="56"/>
-                      <CProgress className="progress-xs" color="danger" value="94"/>
-                    </div>
-                  </div>
-                  <div className="progress-group mb-4">
-                    <div className="progress-group-prepend">
-                      <span className="progress-group-text">
-                      Wednesday
-                      </span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <CProgress className="progress-xs" color="info" value="12"/>
-                      <CProgress className="progress-xs" color="danger" value="67"/>
-                    </div>
-                  </div>
-                  <div className="progress-group mb-4">
-                    <div className="progress-group-prepend">
-                      <span className="progress-group-text">
-                      Thursday
-                      </span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <CProgress className="progress-xs" color="info" value="43"/>
-                      <CProgress className="progress-xs" color="danger" value="91"/>
-                    </div>
-                  </div>
-                  <div className="progress-group mb-4">
-                    <div className="progress-group-prepend">
-                      <span className="progress-group-text">
-                      Friday
-                      </span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <CProgress className="progress-xs" color="info" value="22"/>
-                      <CProgress className="progress-xs" color="danger" value="73"/>
-                    </div>
-                  </div>
-                  <div className="progress-group mb-4">
-                    <div className="progress-group-prepend">
-                      <span className="progress-group-text">
-                      Saturday
-                      </span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <CProgress className="progress-xs" color="info" value="53"/>
-                      <CProgress className="progress-xs" color="danger" value="82"/>
-                    </div>
-                  </div>
-                  <div className="progress-group mb-4">
-                    <div className="progress-group-prepend">
-                      <span className="progress-group-text">
-                      Sunday
-                      </span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <CProgress className="progress-xs" color="info" value="9"/>
-                      <CProgress className="progress-xs" color="danger" value="69"/>
-                    </div>
-                  </div>
-                  <div className="legend text-center">
-                    <small>
-                      <sup className="px-1"><CBadge shape="pill" color="info">&nbsp;</CBadge></sup>
-                      New clients
-                      &nbsp;
-                      <sup className="px-1"><CBadge shape="pill" color="danger">&nbsp;</CBadge></sup>
-                      Recurring clients
-                    </small>
-                  </div>
-                </CCol>
-
-                <CCol xs="12" md="6" xl="6">
-
-                  <CRow>
-                    <CCol sm="6">
-                      <CCallout color="warning">
-                        <small className="text-muted">Pageviews</small>
-                        <br/>
-                        <strong className="h4">78,623</strong>
-                      </CCallout>
-                    </CCol>
-                    <CCol sm="6">
-                      <CCallout color="success">
-                        <small className="text-muted">Organic</small>
-                        <br/>
-                        <strong className="h4">49,123</strong>
-                      </CCallout>
-                    </CCol>
-                  </CRow>
-
-                  <hr className="mt-0"/>
-
-                  <div className="progress-group mb-4">
-                    <div className="progress-group-header">
-                      <CIcon className="progress-group-icon" name="cil-user"/>
-                      <span className="title">Male</span>
-                      <span className="ml-auto font-weight-bold">43%</span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <CProgress className="progress-xs" color="warning" value="43"/>
-                    </div>
-                  </div>
-                  <div className="progress-group mb-5">
-                    <div className="progress-group-header">
-                      <CIcon className="progress-group-icon" name="cil-user-female"/>
-                      <span className="title">Female</span>
-                      <span className="ml-auto font-weight-bold">37%</span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <CProgress className="progress-xs" color="warning" value="37"/>
-                    </div>
-                  </div>
-                  <div className="progress-group">
-                    <div className="progress-group-header">
-                      <CIcon className="progress-group-icon" name="cil-globe-alt"/>
-                      <span className="title">Organic Search</span>
-                      <span className="ml-auto font-weight-bold">191,235 <span className="text-muted small">(56%)</span></span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <CProgress className="progress-xs" color="success" value="56"/>
-                    </div>
-                  </div>
-
-
-                  <div className="progress-group">
-                    <div className="progress-group-header">
-                      <CIcon name="cib-facebook" className="progress-group-icon"/>
-                      <span className="title">Facebook</span>
-                      <span className="ml-auto font-weight-bold">51,223 <span className="text-muted small">(15%)</span></span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <CProgress className="progress-xs" color="success" value="15"/>
-                    </div>
-                  </div>
-                  <div className="progress-group">
-                    <div className="progress-group-header">
-                      <CIcon name="cib-twitter" className="progress-group-icon"/>
-                      <span className="title">Twitter</span>
-                      <span className="ml-auto font-weight-bold">37,564 <span className="text-muted small">(11%)</span></span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <CProgress className="progress-xs" color="success" value="11"/>
-                    </div>
-                  </div>
-                  <div className="progress-group">
-                    <div className="progress-group-header">
-                      <CIcon name="cib-linkedin" className="progress-group-icon"/>
-                      <span className="title">LinkedIn</span>
-                      <span className="ml-auto font-weight-bold">27,319 <span
-                        className="text-muted small">(8%)</span></span>
-                    </div>
-                    <div className="progress-group-bars">
-                      <CProgress className="progress-xs" color="success" value="8"/>
-                    </div>
-                  </div>
-                  <div className="divider text-center">
-                    <CButton color="link" size="sm" className="text-muted">
-                      <CIcon name="cil-options"/>
-                    </CButton>
-                  </div>
-
-                </CCol>
-              </CRow>
-
-              <br/>
-
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </CRow>
+      <WidgetsBrand/>
     </>
   )
 }

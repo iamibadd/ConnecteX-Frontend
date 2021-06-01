@@ -98,6 +98,7 @@ const Register = () => {
                         defaultValue={"Silver"}
                         onChange={e => setPackage(e.target.value)}
                       >
+                        <option value="">Select Package</option>
                         <option value="Silver">Silver</option>
                         <option value="Platinum">Platinum</option>
                         <option value="Diamond">Diamond</option>

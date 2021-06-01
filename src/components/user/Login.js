@@ -18,11 +18,13 @@ import CIcon from '@coreui/icons-react';
 import {useHistory} from 'react-router-dom';
 import axios from "axios";
 import Header from "../../utils/Header";
+import {ClipLoader} from "react-spinners";
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [apiCall, setApiCall] = useState(false);
   const history = useHistory();
   useEffect(() => {
     const user = localStorage.getItem('user');
@@ -30,6 +32,7 @@ const Login = () => {
     if (user !== null) history.push(`/${route}/${user}`);
   }, [history])
   const handleSubmit = e => {
+    setApiCall(true);
     e.preventDefault();
     axios.post(`/user/login`, {
       username: username,
@@ -39,7 +42,10 @@ const Login = () => {
       localStorage.setItem('token', response.data.data);
       localStorage.setItem('user', username);
       history.push(`/user/${username}`);
-    }).catch(e => setMessage(e.response.data.error));
+    }).catch(e => {
+      setApiCall(false);
+      setMessage(e.response.data.error);
+    });
   }
   return (
     <>
@@ -77,10 +83,11 @@ const Login = () => {
                       </CInputGroup>
                       <CRow>
                         <CCol xs="6">
-                          <CButton color="primary" className="px-4">
-                            <input type="submit" value="Login"
-                                   style={{background: 'none', color: 'white', border: 'none'}}/>
-                          </CButton>
+                          {!apiCall ?
+                            <CButton color="primary" className="px-4">
+                              <input type="submit" value="Login"
+                                     style={{background: 'none', color: 'white', border: 'none'}}/>
+                            </CButton> : <ClipLoader color={'black'} loading={true} size={40}/>}
                         </CCol>
                       </CRow>
                     </CForm>
