@@ -45,32 +45,47 @@ const Dashboard = (props) => {
   return (
     <>
       <Header/>
-      <CCard>
-        <Logout/>
-        <CCardBody>
-          <CRow>
-            <CCol sm="12">
-              <div className="text-center">
-                <Typography color={"textPrimary"}
-                            variant={'body1'}>Welcome, <strong>{user.first_name} {user.last_name}</strong>
-                </Typography>
-                <strong>{current_date}</strong>
-                <Typography color={'primary'}>You can view your <strong>{user.package}</strong> package details by
-                  clicking on the below social media icons.</Typography>
-              </div>
-            </CCol>
-            <CCol className="d-md-block">
-              <CButton className="float-right" style={{backgroundColor: '#00bfff'}} onClick={generateReports}>
-                <h4 className="text-white font-weight-lighter">Generate CSV</h4>
-                {apiCall ? <ClipLoader color={'black'} loading={apiCall} size={40}/>
-                  : <CIcon name="cil-cloud-download" className="text-white" size="2xl"/>
-                }
-              </CButton>
-            </CCol>
-          </CRow>
-        </CCardBody>
-      </CCard>
-      <WidgetsBrand/>
+      <Logout/>
+      {user && user.payment ?
+        <>
+          <CCard>
+            <CCardBody>
+              <CRow>
+                <CCol sm="12">
+                  <div className="text-center">
+                    <Typography color={"textPrimary"}
+                                variant={'body1'}>Welcome, <strong>{user.first_name} {user.last_name}</strong>
+                    </Typography>
+                    <strong>{current_date}</strong>
+                    <Typography color={'primary'}>You can view your <strong>{user.package}</strong> package details by
+                      clicking on the below social media icons.</Typography>
+                  </div>
+                </CCol>
+                <CCol className="d-md-block">
+                  <CButton className="float-right" style={{backgroundColor: '#00bfff'}} onClick={generateReports}>
+                    <h4 className="text-white font-weight-lighter">Generate CSV</h4>
+                    {apiCall ? <ClipLoader color={'black'} loading={apiCall} size={40}/>
+                      : <CIcon name="cil-cloud-download" className="text-white" size="2xl"/>
+                    }
+                  </CButton>
+                </CCol>
+              </CRow>
+            </CCardBody>
+          </CCard>
+          <WidgetsBrand/>
+        </> : <div className="text-center">
+          <Typography color={"textPrimary"}
+                      variant={'body1'}>Welcome, <strong>{user.first_name} {user.last_name}</strong>
+          </Typography>
+          <strong>{current_date}</strong>
+          <Typography color={'secondary'}>You haven't completed payment for
+            your <strong>{user.package}</strong> package.
+            <strong className="text-black-50"
+                    onClick={() => history.push(`/user/${user.username}/payment`)}> Click here </strong>
+            to complete your process.
+          </Typography>
+        </div>
+      }
     </>
   )
 }

@@ -17,6 +17,7 @@ import CIcon from '@coreui/icons-react';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import Header from "../../utils/Header";
+import background from "../../assets/background.png";
 
 const Register = () => {
   const history = useHistory();
@@ -24,7 +25,7 @@ const Register = () => {
   const [last_name, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [pack, setPackage] = useState('');
+  const [pack, setPackage] = useState('Silver');
   const [password, setPassword] = useState('');
   const [confirm_password, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -40,17 +41,29 @@ const Register = () => {
         confirm_password: confirm_password
       },
     ).then(async () => {
-        alert('User created!');
-        history.push('/');
+        axios.post('/email/confirm', {
+            first_name: first_name,
+            last_name: last_name,
+            receiver: email,
+            pack: pack,
+          }
+        ).then(() => {
+          alert('User created!');
+          history.push('/');
+        })
       }
     ).catch(async e => setMessage(e.response.data.error));
   }
   return (
     <>
       <Header/>
-      <div className="c-app c-default-layout flex-row align-items-center">
+      <div className="c-app c-default-layout flex-row align-items-center" style={{
+        backgroundImage: `url(${background})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: "top right"
+      }}>
         <CContainer>
-          <CRow className="justify-content-center">
+          <CRow className="justify-content-center" style={{marginBottom: 120}}>
             <CCol md="9" lg="7" xl="6">
               <CCard className="mx-4">
                 <CCardBody className="p-4">

@@ -10,43 +10,53 @@ const WidgetsBrand = () => {
   const {User} = useContext(ContextApi);
   const [user] = User;
   const [facebook, setFacebook] = useState({});
+  const [facebookPosts, setFacebookPosts] = useState({});
   const [instagram, setInstagram] = useState({});
   const [title, setTitle] = useState({});
   const [modal, setModal] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [value, setValue] = useState(false);
   useEffect(() => {
-    axios.get(`/facebook?email=${user.email}`).then(response => setFacebook(response.data.data));
-    axios.get(`/instagram?email=${user.email}`).then(response => setInstagram(response.data.data));
+    axios.get(`/facebook?email=${user.email}`).then(response => {
+      setFacebook(response.data.data.data)
+      setFacebookPosts(response.data.data.posts)
+    }).finally(() => setValue(true));
+    axios.get(`/instagram?email=${user.email}`).then(response => setInstagram(response.data.data)).finally(() => setValue(true));
   }, [user.email])
 
   const PackageDetails = () => {
     if (title === 'Facebook') {
-      return <table className="table table-bordered table-hover table-secondary">
-        <thead>
-        <tr>
-          <th>#</th>
-          <th>Email</th>
-          <th>Package</th>
-          <th>Status</th>
-          <th>Posts</th>
-          <th>Friends</th>
-          <th>StartedAt</th>
-          <th>UpdatedAt</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>{facebook._id}</td>
-          <td>{facebook.email}</td>
-          <td>{facebook.package}</td>
-          <td>{facebook.status}</td>
-          <td>{facebook.posts}</td>
-          <td>{facebook.followers}</td>
-          <td>{facebook.createdAt ? facebook.createdAt.split('T')[0] : ''}</td>
-          <td>{facebook.updatedAt ? facebook.updatedAt.split('T')[0] : ''}</td>
-        </tr>
-        </tbody>
-      </table>
+      return <>
+        <h4>Subscription Status <span
+          className={facebook.status === "Live" ? 'text-success' : 'text-danger'}>{facebook.status}</span></h4>
+        <table className="table table-bordered table-hover table-secondary">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Email</th>
+            <th>Package</th>
+            <th>Post Title</th>
+            <th>StartedAt</th>
+            <th>UpdatedAt</th>
+          </tr>
+          </thead>
+          <tbody>
+          {facebookPosts.length > 0 ?
+            facebookPosts.map((facebook, index) => {
+              return <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{facebook.email}</td>
+                <td>{facebook.package}</td>
+                <td>{facebook.post_details}</td>
+                <td>{facebook.createdAt ? facebook.createdAt.split('T')[0] : ''}</td>
+                <td>{facebook.updatedAt ? facebook.updatedAt.split('T')[0] : ''}</td>
+              </tr>
+            })
+            : null
+          }
+          </tbody>
+        </table>
+      </>
     } else if (title === 'Instagram') {
       return <table className="table table-bordered table-hover table-secondary">
         <thead>
@@ -100,14 +110,15 @@ const WidgetsBrand = () => {
           <br/>
           {loader ? <ClipLoader color={'black'} loading={true} size={100}/> : PackageDetails()}
           <br/>
-          <Button onClick={() => setModal(false)} className='text-center btn-secondary'>Cancel</Button>
+          <Button onClick={() => setModal(false)} className='text-center btn-secondary'>Back</Button>
         </div>
       </Modal>
       <CWidgetBrand
         color="facebook"
-        rightHeader={facebook.followers !== undefined ? String(facebook.followers) : <BeatLoader color="black"/>}
+        rightHeader={value ? String(facebook.friends ? facebook.friends : 0) :
+          <BeatLoader color="black"/>}
         rightFooter="friends"
-        leftHeader={facebook.posts !== undefined ? String(facebook.posts) : <BeatLoader color="black"/>}
+        leftHeader={value ? String(facebook.posts ? facebook.posts : 0) : <BeatLoader color="black"/>}
         leftFooter="posts"
         onClick={() => handleClick('Facebook')}
       >
@@ -122,9 +133,9 @@ const WidgetsBrand = () => {
     <CCol sm="6" lg="3">
       <CWidgetBrand
         color="instagram"
-        rightHeader={instagram.followers !== undefined ? String(instagram.followers) : <BeatLoader color="black"/>}
+        rightHeader={value ? String(instagram.followers ? instagram.followers : 0) : <BeatLoader color="black"/>}
         rightFooter="followers"
-        leftHeader={instagram.follow_requests !== undefined ? String(instagram.follow_requests) :
+        leftHeader={value ? String(instagram.follow_requests ? instagram.follow_requests : 0) :
           <BeatLoader color="black"/>}
         leftFooter="follow requests"
         onClick={() => handleClick('Instagram')}
