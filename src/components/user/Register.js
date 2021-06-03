@@ -18,6 +18,7 @@ import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import Header from "../../utils/Header";
 import background from "../../assets/background.png";
+import {Link} from "@material-ui/core";
 
 const Register = () => {
   const history = useHistory();
@@ -140,6 +141,9 @@ const Register = () => {
                       />
                     </CButton>
                   </CForm>
+                  <div className="mt-2">
+                    <Link href={'/'} className="text-primary text-decoration-none">Already have an account?</Link>
+                  </div>
                 </CCardBody>
               </CCard>
             </CCol>

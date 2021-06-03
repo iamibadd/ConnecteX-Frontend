@@ -26,6 +26,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [apiCall, setApiCall] = useState(false);
+  const [checked, setChecked] = useState(false);
   const history = useHistory();
   useEffect(() => {
     const user = localStorage.getItem('user');
@@ -35,14 +36,14 @@ const Login = () => {
   const handleSubmit = e => {
     setApiCall(true);
     e.preventDefault();
-    axios.post(`/user/login`, {
+    axios.post(!checked ? `/user/login` : `/admin/login`, {
       username: username,
       password: password
     }).then(async response => {
-      localStorage.setItem('route', 'user');
+      localStorage.setItem('route', !checked ? 'user' : 'admin');
       localStorage.setItem('token', response.data.data);
       localStorage.setItem('user', username);
-      history.push(`/user/${username}`);
+      history.push(!checked ? `/user/${username}` : `/admin/${username}`);
     }).catch(e => {
       setApiCall(false);
       setMessage(e.response.data.error);
@@ -88,7 +89,7 @@ const Login = () => {
                       </CInputGroup>
                       <CInputGroup>
                         <div>
-                          <input type="checkbox" name="" id=""/>
+                          <input type="checkbox" checked={checked} onChange={e => setChecked(e.target.checked)}/>
                           <span className='ml-2'>Admin</span>
                         </div>
                       </CInputGroup><br/>
