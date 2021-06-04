@@ -204,14 +204,14 @@ const WidgetsBrand = (props) => {
 
     <CCol sm="6" lg="3">
       <CWidgetBrand
-        rightHeader="12"
-        rightFooter="events"
+        rightHeader="20"
+        rightFooter="Followers"
         leftHeader="4"
-        leftFooter="meetings"
-        color="gradient-warning"
+        leftFooter="Requested"
+        color="twitter"
       >
         <CIcon
-          name="cil-calendar"
+          name="cib-twitter"
           height="52"
           className="my-4"
         />
