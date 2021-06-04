@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 });
 
 
-export default function Instagram(props) {
+export default function LinkedinPosts(props) {
   const classes = useStyles();
   const {users} = props;
   const [filter, setFilter] = useState([]);
@@ -25,6 +25,7 @@ export default function Instagram(props) {
       const filteredData = users.filter(function (item) {
         if (item.email.toLowerCase().includes(query.toLowerCase())) return item.email.toLowerCase().includes(query.toLowerCase());
         else if (item.package.toLowerCase().includes(query.toLowerCase())) return item.package.toLowerCase().includes(query.toLowerCase());
+        else if (item.post_details.toLowerCase().includes(query.toLowerCase())) return item.post_details.toLowerCase().includes(query.toLowerCase());
       });
       setFilter(filteredData);
     } else setFilter([]);
@@ -32,9 +33,9 @@ export default function Instagram(props) {
   return (
     <TableContainer component={Paper}>
       <div className="d-flex justify-content-between">
-        <h2 className="ml-2 text-primary">Instagram</h2>
-        <TextField label="Search by email or package" variant="outlined" size={'small'}
-                   className="mt-2 mr-2"
+        <h2 className="ml-2 text-primary">Linkedin Posts</h2>
+        <TextField label="Search by email, package or post title" variant="outlined" size={'small'}
+                   className="mt-2 mr-2 w-25"
                    onChange={e => filterUsers(e.target.value)}/>
       </div>
       <Table className={classes.table} aria-label="simple table">
@@ -43,9 +44,7 @@ export default function Instagram(props) {
             <TableCell className="font-weight-bold" align="center">#</TableCell>
             <TableCell className="font-weight-bold" align="center">Email</TableCell>
             <TableCell className="font-weight-bold" align="center">Package</TableCell>
-            <TableCell className="font-weight-bold" align="center">Followers</TableCell>
-            <TableCell className="font-weight-bold" align="center">Followers Gained</TableCell>
-            <TableCell className="font-weight-bold" align="center">Follow Requests</TableCell>
+            <TableCell className="font-weight-bold" align="center">Post Title</TableCell>
             <TableCell className="font-weight-bold" align="center">StartedAt</TableCell>
           </TableRow>
         </TableHead>
@@ -54,22 +53,18 @@ export default function Instagram(props) {
             filter.map((user, index) => (
               <TableRow key={index}>
                 <TableCell align="center">{index + 1}</TableCell>
-                <TableCell align="center">{user.username}</TableCell>
+                <TableCell align="center">{user.email}</TableCell>
                 <TableCell align="center">{user.package}</TableCell>
-                <TableCell align="center">{user.followers}</TableCell>
-                <TableCell align="center">{user.followers_gained}</TableCell>
-                <TableCell align="center">{user.follow_requests}</TableCell>
+                <TableCell align="center">{user.post_details}</TableCell>
                 <TableCell align="center">{user.createdAt ? user.createdAt.split('T')[0] : null}</TableCell>
               </TableRow>
             )) :
             users.map((user, index) => (
               <TableRow key={index}>
                 <TableCell align="center">{index + 1}</TableCell>
-                <TableCell align="center">{user.username}</TableCell>
+                <TableCell align="center">{user.email}</TableCell>
                 <TableCell align="center">{user.package}</TableCell>
-                <TableCell align="center">{user.followers}</TableCell>
-                <TableCell align="center">{user.followers_gained}</TableCell>
-                <TableCell align="center">{user.follow_requests}</TableCell>
+                <TableCell align="center">{user.post_details}</TableCell>
                 <TableCell align="center">{user.createdAt ? user.createdAt.split('T')[0] : null}</TableCell>
               </TableRow>
             ))

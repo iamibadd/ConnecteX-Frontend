@@ -17,11 +17,13 @@ function AdminDashboard(props) {
   const route = localStorage.getItem('route');
   const token = localStorage.getItem('token');
   useEffect(() => {
-    if (token === null) history.push('/');
-    else if (loggedInUser !== current_user || route !== 'admin') history.push(`/${route}/${loggedInUser}`);
-    axios.post(`/admin/${current_user}`, {username: current_user}, {headers: {token: token}})
-      .then(async response => setUser(response.data.data))
-      .catch(() => alert('Something went wrong!'));
+    if (token === null) return history.push('/');
+    else if (loggedInUser !== current_user || route !== 'admin') return history.push(`/${route}/${loggedInUser}`);
+    else {
+      axios.post(`/admin/${current_user}`, {username: current_user}, {headers: {token: token}})
+        .then(async response => setUser(response.data.data))
+        .catch(() => alert('Something went wrong!'));
+    }
   }, [current_user, token, history, route, loggedInUser, setUser])
 
   return (

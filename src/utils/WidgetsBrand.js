@@ -6,29 +6,36 @@ import {ContextApi} from "./ContextApi";
 import {Button, Modal, Typography} from "@material-ui/core";
 import {BeatLoader, ClipLoader} from "react-spinners";
 
-const WidgetsBrand = () => {
+const WidgetsBrand = (props) => {
   const {User} = useContext(ContextApi);
   const [user] = User;
   const [facebook, setFacebook] = useState({});
-  const [facebookPosts, setFacebookPosts] = useState({});
+  const [facebookPosts, setFacebookPosts] = useState([]);
+  const [linkedin, setLinkedin] = useState({});
+  const [linkedinPosts, setLinkedinPosts] = useState([]);
   const [instagram, setInstagram] = useState({});
   const [title, setTitle] = useState({});
   const [modal, setModal] = useState(false);
   const [loader, setLoader] = useState(false);
   const [value, setValue] = useState(false);
+  const current_user = props.username;
   useEffect(() => {
-    axios.get(`/facebook?email=${user.email}`).then(response => {
-      setFacebook(response.data.data.data)
-      setFacebookPosts(response.data.data.posts)
-    }).finally(() => setValue(true));
-    axios.get(`/instagram?email=${user.email}`).then(response => setInstagram(response.data.data)).finally(() => setValue(true));
-  }, [user.email])
+    axios.get(`/user/credentials?username=${current_user}`).then(response => response.data).then(async response => {
+      await axios.get(`/facebook?email=${response.data.facebook}`).then(response => {
+        setFacebook(response.data.data.data)
+        setFacebookPosts(response.data.data.posts)
+      }).finally(() => setValue(true));
+      await axios.get(`/linkedin?email=${response.data.linkedin}`).then(response => {
+        setLinkedin(response.data.data.data)
+        setLinkedinPosts(response.data.data.posts)
+      }).finally(() => setValue(true));
+      await axios.get(`/instagram?username=${response.data.instagram}`).then(response => setInstagram(response.data.data)).finally(() => setValue(true));
+    });
+  }, [user.email, current_user])
 
   const PackageDetails = () => {
     if (title === 'Facebook') {
       return <>
-        <h4>Subscription Status <span
-          className={facebook.status === "Live" ? 'text-success' : 'text-danger'}>{facebook.status}</span></h4>
         <table className="table table-bordered table-hover table-secondary">
           <thead>
           <tr>
@@ -74,8 +81,8 @@ const WidgetsBrand = () => {
         </thead>
         <tbody>
         <tr>
-          <td>{instagram._id}</td>
-          <td>{instagram.email}</td>
+          <td>1</td>
+          <td>{instagram.username}</td>
           <td>{instagram.package}</td>
           <td>{instagram.status}</td>
           <td>{instagram.followers}</td>
@@ -86,6 +93,36 @@ const WidgetsBrand = () => {
         </tr>
         </tbody>
       </table>
+    } else if (title === 'Linkedin') {
+      return <>
+        <table className="table table-bordered table-hover table-secondary">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Email</th>
+            <th>Package</th>
+            <th>Post Title</th>
+            <th>StartedAt</th>
+            <th>UpdatedAt</th>
+          </tr>
+          </thead>
+          <tbody>
+          {linkedinPosts.length > 0 ?
+            linkedinPosts.map((linkedin, index) => {
+              return <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{linkedin.email}</td>
+                <td>{linkedin.package}</td>
+                <td>{linkedin.post_details}</td>
+                <td>{linkedin.createdAt ? linkedin.createdAt.split('T')[0] : ''}</td>
+                <td>{linkedin.updatedAt ? linkedin.updatedAt.split('T')[0] : ''}</td>
+              </tr>
+            })
+            : null
+          }
+          </tbody>
+        </table>
+      </>
     }
   }
   const handleClick = title => {
@@ -117,9 +154,9 @@ const WidgetsBrand = () => {
         color="facebook"
         rightHeader={value ? String(facebook.friends ? facebook.friends : 0) :
           <BeatLoader color="black"/>}
-        rightFooter="friends"
+        rightFooter="Friends"
         leftHeader={value ? String(facebook.posts ? facebook.posts : 0) : <BeatLoader color="black"/>}
-        leftFooter="posts"
+        leftFooter="Posts"
         onClick={() => handleClick('Facebook')}
       >
         <CIcon
@@ -134,10 +171,10 @@ const WidgetsBrand = () => {
       <CWidgetBrand
         color="instagram"
         rightHeader={value ? String(instagram.followers ? instagram.followers : 0) : <BeatLoader color="black"/>}
-        rightFooter="followers"
+        rightFooter="Followers"
         leftHeader={value ? String(instagram.follow_requests ? instagram.follow_requests : 0) :
           <BeatLoader color="black"/>}
-        leftFooter="follow requests"
+        leftFooter="Follow Requests"
         onClick={() => handleClick('Instagram')}
       >
         <CIcon
@@ -151,10 +188,11 @@ const WidgetsBrand = () => {
     <CCol sm="6" lg="3">
       <CWidgetBrand
         color="linkedin"
-        rightHeader="500+"
-        rightFooter="contracts"
-        leftHeader="292"
+        rightHeader={value ? String(linkedin.connections ? linkedin.connections : 0) : <BeatLoader color="black"/>}
+        rightFooter="Connections"
+        leftHeader={value ? String(linkedin.posts ? linkedin.posts : 0) : <BeatLoader color="black"/>}
         leftFooter="feeds"
+        onClick={() => handleClick('Linkedin')}
       >
         <CIcon
           name="cib-linkedin"

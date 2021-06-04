@@ -31,7 +31,7 @@ const Login = () => {
   useEffect(() => {
     const user = localStorage.getItem('user');
     const route = localStorage.getItem('route');
-    if (user !== null) history.push(`/${route}/${user}`);
+    if (user !== null) return history.push(`/${route}/${user}`);
   }, [history])
   const handleSubmit = e => {
     setApiCall(true);

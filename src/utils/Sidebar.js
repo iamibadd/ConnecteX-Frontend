@@ -12,10 +12,10 @@ const SideBar = () => {
     <CSidebar className="side-bar">
       {user && user.first_name ?
         <CSidebarBrand className="d-md-down-none">
-          <h4>{user.first_name.toUpperCase()} {user.last_name.toUpperCase()}</h4>
+          <h4>{user.first_name.toUpperCase()} {user.last_name.toUpperCase()}</h4><br/>
         </CSidebarBrand> : null
       }
-      <CSidebarNav style={{marginTop: 50}}>
+      <CSidebarNav style={{marginTop: 75}}>
         <div
           className={stage === 'dashboard' ? "text-center d-flex btn btn-block bg-success" : "text-center d-flex btn btn-block not-active"}
           onClick={() => setStage("dashboard")}>

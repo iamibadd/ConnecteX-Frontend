@@ -19,6 +19,7 @@ import axios from 'axios';
 import Header from "../../utils/Header";
 import background from "../../assets/background.png";
 import {Link} from "@material-ui/core";
+import {ClipLoader} from "react-spinners";
 
 const Register = () => {
   const history = useHistory();
@@ -29,8 +30,10 @@ const Register = () => {
   const [pack, setPackage] = useState('Silver');
   const [password, setPassword] = useState('');
   const [confirm_password, setConfirmPassword] = useState('');
+  const [apiCall, setApiCall] = useState(false);
   const [message, setMessage] = useState('');
   const handleSubmit = e => {
+    setApiCall(true);
     e.preventDefault();
     axios.post('/user/register', {
         first_name: first_name,
@@ -53,7 +56,10 @@ const Register = () => {
           history.push('/');
         })
       }
-    ).catch(async e => setMessage(e.response.data.error));
+    ).catch(async e => {
+      setMessage(e.response.data.error);
+      setApiCall(false);
+    });
   }
   return (
     <>
@@ -135,11 +141,12 @@ const Register = () => {
                       <CInput type="password" placeholder="Repeat password"
                               onChange={e => setConfirmPassword(e.target.value)}/>
                     </CInputGroup>
-                    <CButton color="success">
+                    {!apiCall ? <CButton color="success">
                       <input type="submit" value="Create Account"
                              style={{background: 'none', color: 'white', border: 'none'}}
                       />
-                    </CButton>
+                    </CButton> : <ClipLoader color={'black'} loading={true} size={40}/>
+                    }
                   </CForm>
                   <div className="mt-2">
                     <Link href={'/'} className="text-primary text-decoration-none">Already have an account?</Link>

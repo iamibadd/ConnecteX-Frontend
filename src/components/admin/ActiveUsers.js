@@ -52,9 +52,10 @@ export default function ActiveUsers(props) {
             <TableCell className="font-weight-bold" align="center">Email</TableCell>
             <TableCell className="font-weight-bold" align="center">Package</TableCell>
             <TableCell className="font-weight-bold" align="center">Status</TableCell>
+            <TableCell className="font-weight-bold" align="center">Credentials</TableCell>
             <TableCell className="font-weight-bold" align="center">Payment</TableCell>
             <TableCell className="font-weight-bold" align="center">StartedAt</TableCell>
-            <TableCell className="font-weight-bold" align="center">Cancel Subscription</TableCell>
+            <TableCell className="font-weight-bold" align="center">Subscription</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -67,12 +68,16 @@ export default function ActiveUsers(props) {
                 <TableCell align="center">{user.username}</TableCell>
                 <TableCell align="center">{user.email}</TableCell>
                 <TableCell align="center">{user.package}</TableCell>
-                <TableCell align="center">{user.status}</TableCell>
+                <TableCell align="center"
+                           className={user.status ? "text-success" : "text-danger"}>{user.status}</TableCell>
+                <TableCell align="center"
+                           className={user.credentials ? "text-success" : "text-danger"}>{user.credentials ? "Provided" : "Not Provided"}</TableCell>
                 <TableCell align="center"
                            className={user.payment ? "text-success" : "text-danger"}>{user.payment ? "Done" : "Pending"}</TableCell>
                 <TableCell align="center">{user.createdAt ? user.createdAt.split('T')[0] : null}</TableCell>
                 <TableCell align="center"><Button size={'small'} color={'secondary'}
-                                                  onClick={() => cancelSubscription(user.email)}>Cancel</Button></TableCell>
+                                                  onClick={() => cancelSubscription(user.email)}>Mark as
+                  complete</Button></TableCell>
               </TableRow>
             )) :
             users.map((user, index) => (
@@ -83,12 +88,16 @@ export default function ActiveUsers(props) {
                 <TableCell align="center">{user.username}</TableCell>
                 <TableCell align="center">{user.email}</TableCell>
                 <TableCell align="center">{user.package}</TableCell>
-                <TableCell align="center">{user.status}</TableCell>
+                <TableCell align="center"
+                           className={user.status ? "text-success" : "text-danger"}>{user.status}</TableCell>
+                <TableCell align="center"
+                           className={user.credentials ? "text-success" : "text-danger"}>{user.credentials ? "Provided" : "Not Provided"}</TableCell>
                 <TableCell align="center"
                            className={user.payment ? "text-success" : "text-danger"}>{user.payment ? "Done" : "Pending"}</TableCell>
                 <TableCell align="center">{user.createdAt ? user.createdAt.split('T')[0] : null}</TableCell>
                 <TableCell align="center"><Button size={'small'} color={'secondary'}
-                                                  onClick={() => cancelSubscription(user.email)}>Cancel</Button></TableCell>
+                                                  onClick={() => cancelSubscription(user.email)}>Mark as
+                  complete</Button></TableCell>
               </TableRow>
             ))
           }

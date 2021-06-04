@@ -10,16 +10,21 @@ import Transactions from "../components/admin/Transactions";
 import Facebook from "../components/admin/Facebook";
 import FacebookPosts from "../components/admin/FacebookPosts";
 import Instagram from "../components/admin/Instagram";
+import Linkedin from "../components/admin/Linkedin";
+import LinkedinPosts from "../components/admin/LinkedinPosts";
 
 const Content = () => {
   const {Stage, Subscription} = useContext(ContextApi);
   const [stage] = Stage;
   const [subscription, setSubscription] = Subscription;
   const [activeUsers, setActiveUsers] = useState([]);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [notActiveUsers, setNotActiveUsers] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [facebook, setFacebook] = useState([]);
   const [facebookPosts, setFacebookPosts] = useState([]);
+  const [linkedin, setLinkedin] = useState([]);
+  const [linkedinPosts, setLinkedinPosts] = useState([]);
   const [instagram, setInstagram] = useState([]);
   const [amount, setAmount] = useState(0);
   const [apiCall, setApiCall] = useState(false);
@@ -27,6 +32,9 @@ const Content = () => {
     if (stage === "dashboard") {
       setApiCall(true);
       let calculateAmount = 0;
+      axios.get(`/user/all`).then(response => {
+        setTotalUsers(response.data.data.active.length);
+      });
       axios.get(`/user/payment/all`).then(response => {
         response.data.data.forEach(value => {
           calculateAmount = calculateAmount + value.amount;
@@ -37,7 +45,6 @@ const Content = () => {
     } else if (stage === "users") {
       setSubscription(false);
       setApiCall(true);
-      setAmount(0);
       axios.get(`/user/all`).then(response => {
         setActiveUsers(response.data.data.active);
         setNotActiveUsers(response.data.data.notActive);
@@ -45,7 +52,6 @@ const Content = () => {
       });
     } else if (stage === "transactions") {
       setApiCall(true);
-      setAmount(0);
       axios.get(`/user/payment/all`).then(response => {
         setTransactions(response.data.data);
         setApiCall(false);
@@ -60,14 +66,22 @@ const Content = () => {
         setInstagram(response.data.data);
         setApiCall(false);
       });
+      axios.get(`/linkedin/all`).then(response => {
+        setLinkedin(response.data.data.linkedin);
+        setLinkedinPosts(response.data.data.posts);
+        setApiCall(false);
+      });
     }
-  }, [stage, subscription])
+  }, [stage, subscription, setSubscription])
   return (
     <main className="c-main">
       <CContainer fluid>
         {stage === "dashboard" ?
           <>
-            <h4 className="text-primary">Monthly Sale ${amount}</h4>
+            <div className="d-flex justify-content-between">
+              <h4 className="text-primary">Monthly Sale ${amount}</h4>
+              <h4 className="text-success">Users Registered {totalUsers}</h4>
+            </div>
             <MainChartExample style={{height: '300px', marginTop: '30px'}}/></>
           : stage === "users" ?
             <>
@@ -80,8 +94,9 @@ const Content = () => {
               }
             </> : stage === "transactions" ?
               <>
-                {!apiCall ? <div>{transactions && transactions.length > 0 ? <Transactions users={transactions}/> :
-                  null}
+                {!apiCall ?
+                  <div>{transactions && transactions.length > 0 ? <Transactions users={transactions} amount={amount}/> :
+                    null}
                   </div>
                   : <div className="text-center mt-5"><ClipLoader color={'black'} loading={true} size={200}/></div>
                 }
@@ -93,6 +108,10 @@ const Content = () => {
                       {facebookPosts && facebookPosts.length > 0 ? <FacebookPosts users={facebookPosts}/> : null}
                       <br/>
                       {instagram && instagram.length > 0 ? <Instagram users={instagram}/> : null}
+                      <br/>
+                      {linkedin && linkedin.length > 0 ? <Linkedin users={linkedin}/> : null}
+                      <br/>
+                      {linkedinPosts && linkedinPosts.length > 0 ? <LinkedinPosts users={linkedinPosts}/> : null}
                     </div>
                     : <div className="text-center mt-5"><ClipLoader color={'black'} loading={true} size={200}/></div>
                   }

@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 
 export default function Transactions(props) {
   const classes = useStyles();
-  const {users} = props;
+  const {users, amount} = props;
   const [filter, setFilter] = useState([]);
   const filterUsers = (query) => {
     if (query !== '') {
@@ -34,7 +34,7 @@ export default function Transactions(props) {
       <div className="d-flex justify-content-between">
         <div>
           <h2 className="ml-2 text-primary">Transactions</h2>
-          <div className="ml-2 d-flex"><h4>Total </h4><h4 className="text-success ml-1">$540</h4></div>
+          <div className="ml-2 d-flex"><h4>Total </h4><h4 className="text-success ml-1">${amount}</h4></div>
         </div>
         <TextField label="Search by email or package" variant="outlined" size={'small'}
                    className="mt-2 mr-2" style={{width: '30%'}}

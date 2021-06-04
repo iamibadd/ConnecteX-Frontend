@@ -11,3 +11,7 @@ input::-webkit-inner-spin-button {
 .not-active {
   background-color: #5753F2;
 }
+
+.custom-input {
+  width: 300px;
+}
