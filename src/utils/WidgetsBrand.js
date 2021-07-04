@@ -20,17 +20,19 @@ const WidgetsBrand = (props) => {
   const [value, setValue] = useState(false);
   const current_user = props.username;
   useEffect(() => {
-    axios.get(`/user/credentials?username=${current_user}`).then(response => response.data).then(async response => {
-      await axios.get(`/facebook?email=${response.data.facebook}`).then(response => {
+    (async () => {
+      const userData = (await axios.get(`/user/credentials?username=${current_user}`)).data.data;
+      await axios.get(`/facebook?email=${userData.facebook}`).then(response => {
         setFacebook(response.data.data.data)
         setFacebookPosts(response.data.data.posts)
-      }).finally(() => setValue(true));
-      await axios.get(`/linkedin?email=${response.data.linkedin}`).then(response => {
+      }).catch(error => console.log(error));
+      await axios.get(`/linkedin?email=${userData.linkedin}`).then(response => {
         setLinkedin(response.data.data.data)
         setLinkedinPosts(response.data.data.posts)
-      }).finally(() => setValue(true));
-      await axios.get(`/instagram?username=${response.data.instagram}`).then(response => setInstagram(response.data.data)).finally(() => setValue(true));
-    });
+      }).catch(error => console.log(error));
+      await axios.get(`/instagram?username=${userData.instagram}`).then(response => setInstagram(response.data.data)).catch(error => console.log(error));
+      setValue(true);
+    })()
   }, [user.email, current_user])
 
   const PackageDetails = () => {

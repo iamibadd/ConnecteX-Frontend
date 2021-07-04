@@ -115,13 +115,14 @@ const Register = () => {
                         </CInputGroupText>
                       </CInputGroupPrepend>
                       <CSelect
+                        className="font-weight-bold"
                         defaultValue={"Silver"}
                         onChange={e => setPackage(e.target.value)}
                       >
                         <option value="">Select Package</option>
-                        <option value="Silver">Silver</option>
-                        <option value="Platinum">Platinum</option>
-                        <option value="Diamond">Diamond</option>
+                        <option value="Silver">Silver (3 days in $500)</option>
+                        <option value="Platinum">Platinum (7 days in $750)</option>
+                        <option value="Diamond">Diamond (14 days in $1000)</option>
                       </CSelect>
                     </CInputGroup>
                     <CInputGroup className="mb-3">

@@ -52,7 +52,7 @@ const Dashboard = (props) => {
   const generateReports = () => {
     setApiCall(true);
     setTimeout(function () {
-      window.open(`http://localhost:5000/reports?email=${user.email}`, "_parent");
+      window.open(`http://localhost:5000/reports?user=${user.email}`, "_parent");
       setApiCall(false);
     }, 2000);
   }
