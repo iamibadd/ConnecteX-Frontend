@@ -62,6 +62,7 @@ const Dashboard = (props) => {
     e.preventDefault();
     axios.post('/user/credentials', {
       username: user.username,
+      user: user.username,
       niche: niche,
       pack: user.package,
       facebook: facebook,
