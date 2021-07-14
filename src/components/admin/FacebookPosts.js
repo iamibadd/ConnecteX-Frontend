@@ -23,6 +23,7 @@ export default function FacebookPosts(props) {
   const filterUsers = (query) => {
     if (query !== '') {
       const filteredData = users.filter(function (item) {
+        if (item.user.toLowerCase().includes(query.toLowerCase())) return item.user.toLowerCase().includes(query.toLowerCase());
         if (item.email.toLowerCase().includes(query.toLowerCase())) return item.email.toLowerCase().includes(query.toLowerCase());
         else if (item.package.toLowerCase().includes(query.toLowerCase())) return item.package.toLowerCase().includes(query.toLowerCase());
         else if (item.post_details.toLowerCase().includes(query.toLowerCase())) return item.post_details.toLowerCase().includes(query.toLowerCase());
@@ -34,8 +35,8 @@ export default function FacebookPosts(props) {
     <TableContainer component={Paper}>
       <div className="d-flex justify-content-between">
         <h2 className="ml-2 text-primary">Facebook Posts</h2>
-        <TextField label="Search by email, package or post title" variant="outlined" size={'small'}
-                   className="mt-2 mr-2 w-25"
+        <TextField label="Search by user, email, package or post title" variant="outlined" size={'small'}
+                   className="mt-2 mr-2" style={{width: 350}}
                    onChange={e => filterUsers(e.target.value)}/>
       </div>
       <Table className={classes.table} aria-label="simple table">

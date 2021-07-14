@@ -23,7 +23,8 @@ export default function Twitter(props) {
   const filterUsers = (query) => {
     if (query !== '') {
       const filteredData = users.filter(function (item) {
-        if (item.username.toLowerCase().includes(query.toLowerCase())) return item.username.toLowerCase().includes(query.toLowerCase());
+        if (item.user.toLowerCase().includes(query.toLowerCase())) return item.user.toLowerCase().includes(query.toLowerCase());
+        else if (item.username.toLowerCase().includes(query.toLowerCase())) return item.username.toLowerCase().includes(query.toLowerCase());
         else if (item.package.toLowerCase().includes(query.toLowerCase())) return item.package.toLowerCase().includes(query.toLowerCase());
       });
       setFilter(filteredData);
@@ -33,8 +34,8 @@ export default function Twitter(props) {
     <TableContainer component={Paper}>
       <div className="d-flex justify-content-between">
         <h2 className="ml-2 text-primary">Twitter</h2>
-        <TextField label="Search by email or package" variant="outlined" size={'small'}
-                   className="mt-2 mr-2"
+        <TextField label="Search by user, email or package" variant="outlined" size={'small'}
+                   className="mt-2 mr-2" style={{width: 280}}
                    onChange={e => filterUsers(e.target.value)}/>
       </div>
       <Table className={classes.table} aria-label="simple table">

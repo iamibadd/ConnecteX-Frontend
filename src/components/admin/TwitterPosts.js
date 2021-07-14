@@ -23,6 +23,7 @@ export default function TwitterPosts(props) {
   const filterUsers = (query) => {
     if (query !== '') {
       const filteredData = users.filter(function (item) {
+        if (item.user.toLowerCase().includes(query.toLowerCase())) return item.user.toLowerCase().includes(query.toLowerCase());
         if (item.username.toLowerCase().includes(query.toLowerCase())) return item.username.toLowerCase().includes(query.toLowerCase());
         else if (item.package.toLowerCase().includes(query.toLowerCase())) return item.package.toLowerCase().includes(query.toLowerCase());
         else if (item.post_details.toLowerCase().includes(query.toLowerCase())) return item.post_details.toLowerCase().includes(query.toLowerCase());
@@ -34,8 +35,8 @@ export default function TwitterPosts(props) {
     <TableContainer component={Paper}>
       <div className="d-flex justify-content-between">
         <h2 className="ml-2 text-primary">Twitter Posts</h2>
-        <TextField label="Search by email, package or post title" variant="outlined" size={'small'}
-                   className="mt-2 mr-2 w-25"
+        <TextField label="Search by user, email, package or post title" variant="outlined" size={'small'}
+                   className="mt-2 mr-2" style={{width: 350}}
                    onChange={e => filterUsers(e.target.value)}/>
       </div>
       <Table className={classes.table} aria-label="simple table">
@@ -43,6 +44,7 @@ export default function TwitterPosts(props) {
           <TableRow>
             <TableCell className="font-weight-bold" align="center">#</TableCell>
             <TableCell className="font-weight-bold" align="center">User</TableCell>
+            <TableCell className="font-weight-bold" align="center">Username</TableCell>
             <TableCell className="font-weight-bold" align="center">Package</TableCell>
             <TableCell className="font-weight-bold" align="center">Post Title</TableCell>
             <TableCell className="font-weight-bold" align="center">StartedAt</TableCell>
@@ -54,6 +56,7 @@ export default function TwitterPosts(props) {
               <TableRow key={index}>
                 <TableCell align="center">{index + 1}</TableCell>
                 <TableCell align="center">{user.user}</TableCell>
+                <TableCell align="center">{user.username}</TableCell>
                 <TableCell align="center">{user.package}</TableCell>
                 <TableCell align="center">{user.post_details}</TableCell>
                 <TableCell align="center">{user.createdAt ? user.createdAt.split('T')[0] : null}</TableCell>
@@ -63,6 +66,7 @@ export default function TwitterPosts(props) {
               <TableRow key={index}>
                 <TableCell align="center">{index + 1}</TableCell>
                 <TableCell align="center">{user.user}</TableCell>
+                <TableCell align="center">{user.username}</TableCell>
                 <TableCell align="center">{user.package}</TableCell>
                 <TableCell align="center">{user.post_details}</TableCell>
                 <TableCell align="center">{user.createdAt ? user.createdAt.split('T')[0] : null}</TableCell>
