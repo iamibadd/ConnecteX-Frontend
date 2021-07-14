@@ -60,7 +60,7 @@ export default function ActiveUsers(props) {
         </TableHead>
         <TableBody>
           {filter && filter.length > 0 ?
-            filter.map((user, index) => (
+            filter.slice(0).reverse().map((user, index) => (
               <TableRow key={index}>
                 <TableCell component="th" scope="row">
                   {user.first_name} {user.last_name}
@@ -80,7 +80,7 @@ export default function ActiveUsers(props) {
                   complete</Button></TableCell>
               </TableRow>
             )) :
-            users.map((user, index) => (
+            users.slice(0).reverse().map((user, index) => (
               <TableRow key={index}>
                 <TableCell component="th" scope="row">
                   {user.first_name} {user.last_name}

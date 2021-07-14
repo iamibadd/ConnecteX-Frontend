@@ -42,6 +42,7 @@ export default function LinkedinPosts(props) {
         <TableHead>
           <TableRow>
             <TableCell className="font-weight-bold" align="center">#</TableCell>
+            <TableCell className="font-weight-bold" align="center">User</TableCell>
             <TableCell className="font-weight-bold" align="center">Email</TableCell>
             <TableCell className="font-weight-bold" align="center">Package</TableCell>
             <TableCell className="font-weight-bold" align="center">Post Title</TableCell>
@@ -50,18 +51,20 @@ export default function LinkedinPosts(props) {
         </TableHead>
         <TableBody>
           {filter && filter.length > 0 ?
-            filter.map((user, index) => (
+            filter.slice(0).reverse().map((user, index) => (
               <TableRow key={index}>
                 <TableCell align="center">{index + 1}</TableCell>
+                <TableCell align="center">{user.user}</TableCell>
                 <TableCell align="center">{user.email}</TableCell>
                 <TableCell align="center">{user.package}</TableCell>
                 <TableCell align="center">{user.post_details}</TableCell>
                 <TableCell align="center">{user.createdAt ? user.createdAt.split('T')[0] : null}</TableCell>
               </TableRow>
             )) :
-            users.map((user, index) => (
+            users.slice(0).reverse().map((user, index) => (
               <TableRow key={index}>
                 <TableCell align="center">{index + 1}</TableCell>
+                <TableCell align="center">{user.user}</TableCell>
                 <TableCell align="center">{user.email}</TableCell>
                 <TableCell align="center">{user.package}</TableCell>
                 <TableCell align="center">{user.post_details}</TableCell>

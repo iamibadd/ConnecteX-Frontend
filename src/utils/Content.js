@@ -12,6 +12,8 @@ import FacebookPosts from "../components/admin/FacebookPosts";
 import Instagram from "../components/admin/Instagram";
 import Linkedin from "../components/admin/Linkedin";
 import LinkedinPosts from "../components/admin/LinkedinPosts";
+import Twitter from "../components/admin/Twitter";
+import TwitterPosts from "../components/admin/TwitterPosts";
 
 const Content = () => {
   const {Stage, Subscription} = useContext(ContextApi);
@@ -23,6 +25,8 @@ const Content = () => {
   const [transactions, setTransactions] = useState([]);
   const [facebook, setFacebook] = useState([]);
   const [facebookPosts, setFacebookPosts] = useState([]);
+  const [twitter, setTwitter] = useState([]);
+  const [twitterPosts, setTwitterPosts] = useState([]);
   const [linkedin, setLinkedin] = useState([]);
   const [linkedinPosts, setLinkedinPosts] = useState([]);
   const [instagram, setInstagram] = useState([]);
@@ -61,6 +65,10 @@ const Content = () => {
       axios.get(`/facebook/all`).then(response => {
         setFacebook(response.data.data.facebook);
         setFacebookPosts(response.data.data.posts);
+      });
+      axios.get(`/twitter/all`).then(response => {
+        setTwitter(response.data.data.twitter);
+        setTwitterPosts(response.data.data.posts);
       });
       axios.get(`/instagram/all`).then(response => {
         setInstagram(response.data.data);
@@ -112,6 +120,10 @@ const Content = () => {
                       {linkedin && linkedin.length > 0 ? <Linkedin users={linkedin}/> : null}
                       <br/>
                       {linkedinPosts && linkedinPosts.length > 0 ? <LinkedinPosts users={linkedinPosts}/> : null}
+                      <br/>
+                      {twitter && twitter.length > 0 ? <Twitter users={twitter}/> : null}
+                      <br/>
+                      {twitterPosts && twitterPosts.length > 0 ? <TwitterPosts users={twitterPosts}/> : null}
                     </div>
                     : <div className="text-center mt-5"><ClipLoader color={'black'} loading={true} size={200}/></div>
                   }

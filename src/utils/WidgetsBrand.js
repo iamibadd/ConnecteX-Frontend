@@ -13,6 +13,8 @@ const WidgetsBrand = (props) => {
   const [facebookPosts, setFacebookPosts] = useState([]);
   const [linkedin, setLinkedin] = useState({});
   const [linkedinPosts, setLinkedinPosts] = useState([]);
+  const [twitter, setTwitter] = useState({});
+  const [twitterPosts, setTwitterPosts] = useState([]);
   const [instagram, setInstagram] = useState({});
   const [title, setTitle] = useState({});
   const [modal, setModal] = useState(false);
@@ -30,6 +32,10 @@ const WidgetsBrand = (props) => {
         await axios.get(`/linkedin?email=${userData.linkedin}`).then(response => {
           setLinkedin(response.data.data.data)
           setLinkedinPosts(response.data.data.posts)
+        }).catch(error => console.log(error));
+        await axios.get(`/twitter?username=${userData.twitter}`).then(response => {
+          setTwitter(response.data.data.data)
+          setTwitterPosts(response.data.data.posts)
         }).catch(error => console.log(error));
         await axios.get(`/instagram?username=${userData.instagram}`).then(response => setInstagram(response.data.data)).catch(error => console.log(error));
       }
@@ -127,6 +133,37 @@ const WidgetsBrand = (props) => {
           </tbody>
         </table>
       </>
+    } else if (title === 'Twitter') {
+      return <table className="table table-bordered table-hover table-secondary">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Username</th>
+          <th>Package</th>
+          <th>Status</th>
+          <th>Posts</th>
+          <th>Followers</th>
+          <th>Followers Gained</th>
+          <th>Follow Requests</th>
+          <th>StartedAt</th>
+          <th>UpdatedAt</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>1</td>
+          <td>{twitter.username}</td>
+          <td>{twitter.package}</td>
+          <td>{twitter.status}</td>
+          <td>{twitter.posts}</td>
+          <td>{twitter.followers}</td>
+          <td>{twitter.followers_gained}</td>
+          <td>{twitter.follow_requests}</td>
+          <td>{twitter.createdAt ? twitter.createdAt.split('T')[0] : ''}</td>
+          <td>{twitter.updatedAt ? twitter.updatedAt.split('T')[0] : ''}</td>
+        </tr>
+        </tbody>
+      </table>
     }
   }
   const handleClick = title => {
@@ -194,8 +231,8 @@ const WidgetsBrand = (props) => {
         color="linkedin"
         rightHeader={value ? String(linkedin.connections ? linkedin.connections : 0) : <BeatLoader color="black"/>}
         rightFooter="Connections"
-        leftHeader={value ? String(linkedin.posts ? linkedin.posts : 0) : <BeatLoader color="black"/>}
-        leftFooter="feeds"
+        leftHeader={value ? String(linkedin.requests ? linkedin.requests : 0) : <BeatLoader color="black"/>}
+        leftFooter="Requests"
         onClick={() => handleClick('Linkedin')}
       >
         <CIcon
@@ -208,11 +245,13 @@ const WidgetsBrand = (props) => {
 
     <CCol sm="6" lg="3">
       <CWidgetBrand
-        rightHeader="20"
+        rightHeader={value ? String(twitter.followers ? twitter.followers : 0) : <BeatLoader color="black"/>}
         rightFooter="Followers"
-        leftHeader="4"
+        leftHeader={value ? String(twitter.follow_requests ? twitter.follow_requests : 0) :
+          <BeatLoader color="black"/>}
         leftFooter="Requested"
         color="twitter"
+        onClick={() => handleClick('Twitter')}
       >
         <CIcon
           name="cib-twitter"

@@ -16,15 +16,16 @@ const useStyles = makeStyles({
 });
 
 
-export default function Linkedin(props) {
+export default function TwitterPosts(props) {
   const classes = useStyles();
   const {users} = props;
   const [filter, setFilter] = useState([]);
   const filterUsers = (query) => {
     if (query !== '') {
       const filteredData = users.filter(function (item) {
-        if (item.email.toLowerCase().includes(query.toLowerCase())) return item.email.toLowerCase().includes(query.toLowerCase());
+        if (item.username.toLowerCase().includes(query.toLowerCase())) return item.username.toLowerCase().includes(query.toLowerCase());
         else if (item.package.toLowerCase().includes(query.toLowerCase())) return item.package.toLowerCase().includes(query.toLowerCase());
+        else if (item.post_details.toLowerCase().includes(query.toLowerCase())) return item.post_details.toLowerCase().includes(query.toLowerCase());
       });
       setFilter(filteredData);
     } else setFilter([]);
@@ -32,9 +33,9 @@ export default function Linkedin(props) {
   return (
     <TableContainer component={Paper}>
       <div className="d-flex justify-content-between">
-        <h2 className="ml-2 text-primary">Linkedin</h2>
-        <TextField label="Search by email or package" variant="outlined" size={'small'}
-                   className="mt-2 mr-2"
+        <h2 className="ml-2 text-primary">Twitter Posts</h2>
+        <TextField label="Search by email, package or post title" variant="outlined" size={'small'}
+                   className="mt-2 mr-2 w-25"
                    onChange={e => filterUsers(e.target.value)}/>
       </div>
       <Table className={classes.table} aria-label="simple table">
@@ -42,11 +43,8 @@ export default function Linkedin(props) {
           <TableRow>
             <TableCell className="font-weight-bold" align="center">#</TableCell>
             <TableCell className="font-weight-bold" align="center">User</TableCell>
-            <TableCell className="font-weight-bold" align="center">Email</TableCell>
             <TableCell className="font-weight-bold" align="center">Package</TableCell>
-            <TableCell className="font-weight-bold" align="center">Connections</TableCell>
-            <TableCell className="font-weight-bold" align="center">Followers Gained</TableCell>
-            <TableCell className="font-weight-bold" align="center">Connection Requests</TableCell>
+            <TableCell className="font-weight-bold" align="center">Post Title</TableCell>
             <TableCell className="font-weight-bold" align="center">StartedAt</TableCell>
           </TableRow>
         </TableHead>
@@ -56,11 +54,8 @@ export default function Linkedin(props) {
               <TableRow key={index}>
                 <TableCell align="center">{index + 1}</TableCell>
                 <TableCell align="center">{user.user}</TableCell>
-                <TableCell align="center">{user.email}</TableCell>
                 <TableCell align="center">{user.package}</TableCell>
-                <TableCell align="center">{user.connections}</TableCell>
-                <TableCell align="center">{user.gained}</TableCell>
-                <TableCell align="center">{user.requests}</TableCell>
+                <TableCell align="center">{user.post_details}</TableCell>
                 <TableCell align="center">{user.createdAt ? user.createdAt.split('T')[0] : null}</TableCell>
               </TableRow>
             )) :
@@ -68,11 +63,8 @@ export default function Linkedin(props) {
               <TableRow key={index}>
                 <TableCell align="center">{index + 1}</TableCell>
                 <TableCell align="center">{user.user}</TableCell>
-                <TableCell align="center">{user.email}</TableCell>
                 <TableCell align="center">{user.package}</TableCell>
-                <TableCell align="center">{user.connections}</TableCell>
-                <TableCell align="center">{user.gained}</TableCell>
-                <TableCell align="center">{user.requests}</TableCell>
+                <TableCell align="center">{user.post_details}</TableCell>
                 <TableCell align="center">{user.createdAt ? user.createdAt.split('T')[0] : null}</TableCell>
               </TableRow>
             ))

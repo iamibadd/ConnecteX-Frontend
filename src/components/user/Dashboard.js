@@ -26,7 +26,7 @@ const Dashboard = (props) => {
   const [facebook_password, setFacebookPassword] = useState('');
   const [instagram, setInstagram] = useState('');
   const [instagram_password, setInstagramPassword] = useState('');
-  const [linkedin, setLinkedin] = useState('Silver');
+  const [linkedin, setLinkedin] = useState('');
   const [linkedin_password, setLinkedinPassword] = useState('');
   const [twitter, setTwitter] = useState('');
   const [twitter_password, setTwitterPassword] = useState('');
@@ -52,7 +52,7 @@ const Dashboard = (props) => {
   const generateReports = () => {
     setApiCall(true);
     setTimeout(function () {
-      window.open(`http://localhost:5000/reports?user=${user.email}`, "_parent");
+      window.open(`http://localhost:5000/reports?user=${user.username}`, "_parent");
       setApiCall(false);
     }, 2000);
   }
