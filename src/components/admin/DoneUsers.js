@@ -35,7 +35,7 @@ export default function DoneUsers(props) {
       setFilter(filteredData);
     } else setFilter([]);
   };
-  const deleteUser = async email => await axios.delete('/user/delete', {data: {email: email}}).then(() => setSubscription(true));
+  const deleteUser = async email => await axios.delete('https://connectexbackend.herokuapp.com/user/delete', {data: {email: email}}).then(() => setSubscription(true));
 
   return (
     <TableContainer component={Paper}>

@@ -36,10 +36,10 @@ const Content = () => {
     if (stage === "dashboard") {
       setApiCall(true);
       let calculateAmount = 0;
-      axios.get(`/user/all`).then(response => {
+      axios.get(`https://connectexbackend.herokuapp.com/user/all`).then(response => {
         setTotalUsers(response.data.data.active.length);
       });
-      axios.get(`/user/payment/all`).then(response => {
+      axios.get(`https://connectexbackend.herokuapp.com/user/payment/all`).then(response => {
         response.data.data.forEach(value => {
           calculateAmount = calculateAmount + value.amount;
           setAmount(calculateAmount);
@@ -49,32 +49,32 @@ const Content = () => {
     } else if (stage === "users") {
       setSubscription(false);
       setApiCall(true);
-      axios.get(`/user/all`).then(response => {
+      axios.get(`https://connectexbackend.herokuapp.com/user/all`).then(response => {
         setActiveUsers(response.data.data.active);
         setNotActiveUsers(response.data.data.notActive);
         setApiCall(false);
       });
     } else if (stage === "transactions") {
       setApiCall(true);
-      axios.get(`/user/payment/all`).then(response => {
+      axios.get(`https://connectexbackend.herokuapp.com/user/payment/all`).then(response => {
         setTransactions(response.data.data);
         setApiCall(false);
       });
     } else if (stage === "reports") {
       setApiCall(true);
-      axios.get(`/facebook/all`).then(response => {
+      axios.get(`https://connectexbackend.herokuapp.com/facebook/all`).then(response => {
         setFacebook(response.data.data.facebook);
         setFacebookPosts(response.data.data.posts);
       });
-      axios.get(`/twitter/all`).then(response => {
+      axios.get(`https://connectexbackend.herokuapp.com/twitter/all`).then(response => {
         setTwitter(response.data.data.twitter);
         setTwitterPosts(response.data.data.posts);
       });
-      axios.get(`/instagram/all`).then(response => {
+      axios.get(`https://connectexbackend.herokuapp.com/instagram/all`).then(response => {
         setInstagram(response.data.data);
         setApiCall(false);
       });
-      axios.get(`/linkedin/all`).then(response => {
+      axios.get(`https://connectexbackend.herokuapp.com/linkedin/all`).then(response => {
         setLinkedin(response.data.data.linkedin);
         setLinkedinPosts(response.data.data.posts);
         setApiCall(false);

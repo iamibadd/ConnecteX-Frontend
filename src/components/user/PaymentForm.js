@@ -54,7 +54,7 @@ const PaymentForm = () => {
     if (error) setApiCall(false);
     else {
       const {id} = paymentMethod;
-      await axios.post('/user/payment', {
+      await axios.post('https://connectexbackend.herokuapp.com/user/payment', {
           email: email,
           first_name: first_name,
           last_name: last_name,
@@ -63,7 +63,7 @@ const PaymentForm = () => {
           id
         },
       ).then(async () => {
-          await axios.post('/email/payment', {
+          await axios.post('https://connectexbackend.herokuapp.com/email/payment', {
             first_name: first_name,
             last_name: last_name,
             receiver: email,

@@ -20,7 +20,7 @@ function AdminDashboard(props) {
     if (token === null) return history.push('/');
     else if (loggedInUser !== current_user || route !== 'admin') return history.push(`/${route}/${loggedInUser}`);
     else {
-      axios.post(`/admin/${current_user}`, {username: current_user}, {headers: {token: token}})
+      axios.post(`https://connectexbackend.herokuapp.com/admin/${current_user}`, {username: current_user}, {headers: {token: token}})
         .then(async response => setUser(response.data.data))
         .catch(() => alert('Something went wrong!'));
     }

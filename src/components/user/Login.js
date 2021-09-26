@@ -36,7 +36,7 @@ const Login = () => {
   const handleSubmit = e => {
     setApiCall(true);
     e.preventDefault();
-    axios.post(!checked ? `/user/login` : `/admin/login`, {
+    axios.post(!checked ? `https://connectexbackend.herokuapp.com/user/login` : `https://connectexbackend.herokuapp.com/admin/login`, {
       username: username,
       password: password
     }).then(async response => {

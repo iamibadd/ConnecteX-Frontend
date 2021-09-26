@@ -35,7 +35,7 @@ const Register = () => {
   const handleSubmit = e => {
     setApiCall(true);
     e.preventDefault();
-    axios.post('/user/register', {
+    axios.post('https://connectexbackend.herokuapp.com/user/register', {
         first_name: first_name,
         last_name: last_name,
         email: email,
@@ -45,7 +45,7 @@ const Register = () => {
         confirm_password: confirm_password
       },
     ).then(async () => {
-        axios.post('/email/confirm', {
+        axios.post('https://connectexbackend.herokuapp.com/email/confirm', {
             first_name: first_name,
             last_name: last_name,
             receiver: email,

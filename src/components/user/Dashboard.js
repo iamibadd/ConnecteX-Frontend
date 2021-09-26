@@ -43,7 +43,7 @@ const Dashboard = (props) => {
     if (token === null) return history.push('/');
     else if (loggedInUser !== current_user || route !== 'user') return history.push(`/${route}/${loggedInUser}`);
     else {
-      axios.post(`/user/${current_user}`, {username: current_user}, {headers: {token: token}})
+      axios.post(`https://connectexbackend.herokuapp.com/user/${current_user}`, {username: current_user}, {headers: {token: token}})
         .then(async response => setUser(response.data.data))
         .catch(() => alert('Something went wrong!'));
     }
@@ -60,7 +60,7 @@ const Dashboard = (props) => {
   const handleSubmit = async e => {
     setLoader(true);
     e.preventDefault();
-    axios.post('/user/credentials', {
+    axios.post('https://connectexbackend.herokuapp.com/user/credentials', {
       username: user.username,
       user: user.username,
       niche: niche,

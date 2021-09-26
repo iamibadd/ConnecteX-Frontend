@@ -35,7 +35,7 @@ export default function ActiveUsers(props) {
       setFilter(filteredData);
     } else setFilter([]);
   };
-  const cancelSubscription = async email => await axios.post('/user/cancel-subscription', {email: email}).then(() => setSubscription(true));
+  const cancelSubscription = async email => await axios.post('https://connectexbackend.herokuapp.com/user/cancel-subscription', {email: email}).then(() => setSubscription(true));
   return (
     <TableContainer component={Paper}>
       <div className="d-flex justify-content-between">
